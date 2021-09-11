@@ -5,6 +5,7 @@ import com.opencsv.exceptions.CsvException;
 import io.ankur.coronavirustracker.models.LocationStats;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -29,7 +30,17 @@ public class CoronavirusService {
 
     private int totalNumberOfCases;
 
+
+    /**
+     * Cron expression is represented by six fields:
+     *
+     * second, minute, hour, day of month, month, day(s) of week
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws CsvException
+     */
     @PostConstruct
+    @Scheduled(cron = "* * 1 * * *")
     public void fetchData() throws IOException, InterruptedException, CsvException {
         HttpClient client =  HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).build();
